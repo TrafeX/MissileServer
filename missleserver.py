@@ -27,36 +27,37 @@ def setup_usb():
     # Tested only with the Cheeky Dream Thunder
     global DEVICES
 
-    DEVICES.append(usb.core.find(idVendor=0x2123, idProduct=0x1010, bus=001))
-    DEVICES.append(usb.core.find(idVendor=0x2123, idProduct=0x1010, bus=002))
+    DEVICES = usb.core.find(find_all=True, idVendor=0x2123, idProduct=0x1010)
 
-    if DEVICES[0] is None:
-        raise ValueError('Missile device not found')
+    for dev in DEVICES:
+        # On Linux we need to detach usb HID first
+        if "Linux" == platform.system():
+            try:
+                dev.detach_kernel_driver(0)
+            except Exception, e:
+                pass # already unregistered
 
-    # On Linux we need to detach usb HID first
-    if "Linux" == platform.system():
-        try:
-            DEVICES[0].detach_kernel_driver(0)
-            DEVICES[1].detach_kernel_driver(0)
-        except Exception, e:
-            pass # already unregistered
-
-    DEVICES[0].set_configuration()
-    DEVICES[1].set_configuration()
+        dev.set_configuration()
 
 def send_cmd(cmd, device):
-    if device == "all":
-        for dev in DEVICES:
-            dev.ctrl_transfer(0x21, 0x09, 0, 0, [0x02, cmd, 0x00,0x00,0x00,0x00,0x00,0x00])
-    else:
-        DEVICES[device].ctrl_transfer(0x21, 0x09, 0, 0, [0x02, cmd, 0x00,0x00,0x00,0x00,0x00,0x00])
+    try:
+        if device == "all":
+            for dev in DEVICES:
+                dev.ctrl_transfer(0x21, 0x09, 0, 0, [0x02, cmd, 0x00,0x00,0x00,0x00,0x00,0x00])
+        else:
+            DEVICES[device].ctrl_transfer(0x21, 0x09, 0, 0, [0x02, cmd, 0x00,0x00,0x00,0x00,0x00,0x00])
+    except Exception, e:
+        print "ERROR: Device doesn't exists: %s" % device
 
 def led(cmd, device):
-    if device == "all":
-        for dev in DEVICES:
-            dev.ctrl_transfer(0x21, 0x09, 0, 0, [0x03, cmd, 0x00,0x00,0x00,0x00,0x00,0x00])
-    else:
-        DEVICES[device].ctrl_transfer(0x21, 0x09, 0, 0, [0x03, cmd, 0x00,0x00,0x00,0x00,0x00,0x00])
+    try:
+        if device == "all":
+            for dev in DEVICES:
+                dev.ctrl_transfer(0x21, 0x09, 0, 0, [0x03, cmd, 0x00,0x00,0x00,0x00,0x00,0x00])
+        else:
+            DEVICES[device].ctrl_transfer(0x21, 0x09, 0, 0, [0x03, cmd, 0x00,0x00,0x00,0x00,0x00,0x00])
+    except Exception, e:
+        print "ERROR: Device doesn't exists: %s" % device
 
 def send_move(cmd, duration_ms, device):
     send_cmd(cmd, device)
