@@ -44,3 +44,7 @@ The client can be controlled with the keyboard using the following keys;
 * To zero position: z
 * Device: 0 or 1
 * Exit: escape
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/TrafeX/missileserver/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
