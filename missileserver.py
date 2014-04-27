@@ -61,7 +61,7 @@ def setup_usb():
 
 def send_cmd(cmd, device):
     try:
-        if device == "all":
+        if device == 9:
             for dev in DEVICES:
                 dev.ctrl_transfer(0x21, 0x09, 0, 0, [0x02, cmd, 0x00,0x00,0x00,0x00,0x00,0x00])
         else:
@@ -71,7 +71,7 @@ def send_cmd(cmd, device):
 
 def led(cmd, device):
     try:
-        if device == "all":
+        if device == 9:
             for dev in DEVICES:
                 dev.ctrl_transfer(0x21, 0x09, 0, 0, [0x03, cmd, 0x00,0x00,0x00,0x00,0x00,0x00])
         else:
@@ -129,9 +129,9 @@ def main(args):
         data, addr = sock.recvfrom(8192)
         print "Received data %s " % data
         jsondata = json.loads(data)
-        command = jsondata["command"].lower()
-        value = int(jsondata["value"].lower())
-        device = int(jsondata["device"].lower())
+        command = str(jsondata["command"]).lower()
+        value = int(jsondata["value"])
+        device = int(jsondata["device"])
         print "Action: {}, Value: {}, Device: {}".format(command, value, device)
         run_command(command, value, device)
 

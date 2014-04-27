@@ -31,7 +31,7 @@ arg2
 
 arg3
 * define which device to use
-* use 'all' to control all devices at the same time
+* use '9' to control all devices at the same time
 
 Client keyboard controls
 ========================
@@ -42,5 +42,5 @@ The client can be controlled with the keyboard using the following keys;
 * Led on: l
 * Led off: o
 * To zero position: z
-* Device: 0 or 1
+* Device: 0, 1 or 9 for all
 * Exit: escape

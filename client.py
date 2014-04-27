@@ -29,7 +29,7 @@ import socket
 
 UDP_IP = "127.0.0.1"
 UDP_PORT = 7777
-DEVICE = 1
+DEVICE = 0
 
 print "UDP target IP:", UDP_IP
 print "UDP target port:", UDP_PORT
@@ -68,6 +68,8 @@ def key(event):
         DEVICE = 0
     if event.keysym == '2':
         DEVICE = 1
+    if event.keysym == '9':
+        DEVICE = 9
 
 
 root = tk.Tk()
